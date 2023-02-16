@@ -1,12 +1,12 @@
-const path = require('path');
-
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 
 
-const helperRoutes = require('./routes/helper');
-
+const connectDB = require('./services/db');
+const availableHelpersRoutes = require('./routes/availableHelpersRoute');
+const userLoginRoutes = require('./routes/userLoginRoute');
+const userSignupRoutes = require('./routes/userSignupRoute');
+const forgotPasswordRoutes = require('./routes/forgotPasswordRoutes');
 
 const app = express();
 
@@ -27,8 +27,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/helper', helperRoutes);
-// app.use('/user', authRoutes);
+app.use('/availableHelpers', availableHelpersRoutes);
+app.use('/userLogin', userLoginRoutes);
+app.use('/userSignup', userSignupRoutes);
+app.use('/', forgotPasswordRoutes);
 
 app.use((error, req, res, next) => {
   console.log(error);
@@ -40,12 +42,4 @@ app.use((error, req, res, next) => {
 
 app.listen(port, () => console.log("hello there") );
 
-mongoose
-  .connect(
-    'mongodb+srv://Dhyey:dhyey@cluster0.xpjedvc.mongodb.net/test'
-  ,{useNewUrlParser: true,
-    useUnifiedTopology: true})
-  .then(result => {
-   
-  })
-  .catch(err => console.log(err));
+connectDB();

@@ -4,9 +4,14 @@ const Schema = mongoose.Schema;
 const helperSchema = new Schema(
   {
     name: {
+      firstname:{
+        type: String,
+        required: true
+      },
+      lastname:{
       type: String,
       required: true
-    },
+    }},
     dob: {
       type: String,
       required: true
