@@ -1,9 +1,7 @@
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 const ResetToken = require('../models/resetTokenModel');
-const User = require('../models/user');
+const User = require('../models/userModel');
 
 exports.forgotPassword = async (req, res) => {
   const email = req.body.email;
@@ -48,44 +46,4 @@ exports.forgotPassword = async (req, res) => {
   }
 };
 
-exports.resetPassword = async (req, res, next) => {
-  let token = req.params.token;
-  const newPassword = req.body.password;
-
-  // Find the reset token in the database
-  const resetToken = await ResetToken.findOne({ token: token, expiresAt: { $gt: new Date() } });
-
-  if (!resetToken) {
-    const error = new Error('Invalid or expired token.');
-    error.statusCode = 400;
-    throw error;
-  }
-
-  // Find the user associated with the reset token
-  const user = await User.findOne({ email: resetToken.email });
-
-  if (!user) {
-    const error = new Error('User not found.');
-    error.statusCode = 404;
-    throw error;
-  }
-
-  // Update the user's password and delete the reset token
-  const hashedPassword = await bcrypt.hash(newPassword, 12);
-  user.password = hashedPassword;
-  await user.save();
-  await resetToken.deleteOne();
-
-  // Generate a new access token for the user
-   token = jwt.sign(
-    {
-      email: user.email,
-      userId: user._id.toString()
-    },
-    'somesupersecretsecret',
-    { expiresIn: '1h' }
-  );
-
-  res.status(200).json({ token: token, userId: user._id.toString() });
-};
 

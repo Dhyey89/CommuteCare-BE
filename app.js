@@ -4,9 +4,11 @@ const bodyParser = require('body-parser');
 
 const connectDB = require('./services/db');
 const availableHelpersRoutes = require('./routes/availableHelpersRoute');
+const createBookingRoutes = require('./routes/createBookingRoute');
 const userLoginRoutes = require('./routes/userLoginRoute');
 const userSignupRoutes = require('./routes/userSignupRoute');
-const forgotPasswordRoutes = require('./routes/forgotPasswordRoutes');
+const forgotPasswordRoutes = require('./routes/forgotPasswordRoute');
+const resetPasswordRoutes = require('./routes/resetPasswordRoute');
 
 const app = express();
 
@@ -27,10 +29,13 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/availableHelpers', availableHelpersRoutes);
-app.use('/userLogin', userLoginRoutes);
-app.use('/userSignup', userSignupRoutes);
+app.use('/', availableHelpersRoutes);
+app.use('/', createBookingRoutes);
+app.use('/', userLoginRoutes);
+app.use('/', userSignupRoutes);
 app.use('/', forgotPasswordRoutes);
+app.use('/', resetPasswordRoutes);
+
 
 app.use((error, req, res, next) => {
   console.log(error);
@@ -40,6 +45,7 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message, data: data });
 });
 
+connectDB();
+
 app.listen(port, () => console.log("hello there") );
 
-connectDB();

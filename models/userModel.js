@@ -13,7 +13,13 @@ const userSchema = new Schema({
   name: {
     type: String,
     required: true
-  }
+  },
+  userId:{
+    type:Schema.Types.ObjectId,
+    ref : 'User'
+  },
+  bookings: [{
+    type: Schema.Types.ObjectId
   
   // Helpers: [
   //   {
@@ -21,6 +27,8 @@ const userSchema = new Schema({
   //     ref: 'Helpers_1'
   //   }
   // ]
-});
+}]
+
+})
 
 module.exports = mongoose.model('User', userSchema);

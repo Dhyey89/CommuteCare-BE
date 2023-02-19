@@ -70,7 +70,11 @@ const helperSchema = new Schema(
       type: String,
       default: ""
     }
-  }
+  },
+  bookings: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Booking'
+  }]
   },
   { timestamps: true }
 );
