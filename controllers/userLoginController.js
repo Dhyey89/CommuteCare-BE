@@ -2,7 +2,7 @@ const { validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const User = require('../models/user');
+const User = require('../models/userModel');
 
 exports.login = (req, res, next) => {
     const email = req.body.email;
